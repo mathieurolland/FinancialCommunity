@@ -38,22 +38,24 @@ ActiveRecord::Schema.define(version: 20160919093254) do
   create_table "debate_rooms", force: :cascade do |t|
     t.string   "title"
     t.text     "description"
-    t.integer  "guest_id"
-    t.integer  "host_id"
+    t.integer  "user_id"
+    t.integer  "market_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.index ["guest_id"], name: "index_debate_rooms_on_guest_id", using: :btree
-    t.index ["host_id"], name: "index_debate_rooms_on_host_id", using: :btree
+    t.index ["market_id"], name: "index_debate_rooms_on_market_id", using: :btree
+    t.index ["user_id"], name: "index_debate_rooms_on_user_id", using: :btree
   end
 
   create_table "guest_boxes", force: :cascade do |t|
-    t.integer  "user_id"
+    t.integer  "guest_id"
+    t.integer  "host_id"
     t.integer  "debate_room_id"
     t.string   "status"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.index ["debate_room_id"], name: "index_guest_boxes_on_debate_room_id", using: :btree
-    t.index ["user_id"], name: "index_guest_boxes_on_user_id", using: :btree
+    t.index ["guest_id"], name: "index_guest_boxes_on_guest_id", using: :btree
+    t.index ["host_id"], name: "index_guest_boxes_on_host_id", using: :btree
   end
 
   create_table "markets", force: :cascade do |t|
@@ -65,9 +67,11 @@ ActiveRecord::Schema.define(version: 20160919093254) do
   create_table "messages", force: :cascade do |t|
     t.string   "content"
     t.integer  "debate_room_id"
+    t.integer  "user_id"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.index ["debate_room_id"], name: "index_messages_on_debate_room_id", using: :btree
+    t.index ["user_id"], name: "index_messages_on_user_id", using: :btree
   end
 
   create_table "publications", force: :cascade do |t|
@@ -124,9 +128,10 @@ ActiveRecord::Schema.define(version: 20160919093254) do
 
   add_foreign_key "comments", "publications"
   add_foreign_key "comments", "users"
+  add_foreign_key "debate_rooms", "users"
   add_foreign_key "guest_boxes", "debate_rooms"
-  add_foreign_key "guest_boxes", "users"
   add_foreign_key "messages", "debate_rooms"
+  add_foreign_key "messages", "users"
   add_foreign_key "publications", "markets"
   add_foreign_key "publications", "users"
   add_foreign_key "user_values", "\"values\"", column: "value_id"
