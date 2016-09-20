@@ -13,8 +13,8 @@ class User < ApplicationRecord
 
     has_many :hosted_guest_boxes, foreign_key: :host_id, class_name: "GuestBox"
     has_many :invited_guest_boxes, foreign_key: :guest_id, class_name: "GuestBox"
-    has_many :hosted_guys, through: :hosted_connections, class_name: "User", source: :host
-    has_many :invited_guys, through: :invited_connections, class_name: "User", source: :guest
+    has_many :hosted_guys, through: :hosted_guest_boxes, class_name: "User", source: :host
+    has_many :invited_guys, through: :invited_guest_boxes, class_name: "User", source: :guest
 
     has_many :debate_rooms
     has_many :messages
@@ -24,5 +24,9 @@ class User < ApplicationRecord
     has_many :follower_guys, through: :follower_connections, class_name: "User", source: :follower
     has_many :followed_guys, through: :followed_connections, class_name: "User", source: :followed
 
+    validates :first_name, presence: true
+    validates :last_name, presence: true
+    validates :pseudo, presence: true
+    validates :pseudo, uniqueness: true
 
 end
