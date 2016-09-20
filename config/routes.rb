@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   devise_for :users
-  root to: "pages#dashboard", constraints: lambda { |r| r.env["warden"].authenticate? }
+  root to: "pages#actus", constraints: lambda { |r| r.env["warden"].authenticate? }
   root to: 'pages#home'
+  get "/dashboard/", to: "pages#dashboard"
   resources :markets, only: [:index]
   resources :values, only: [:index, :create]
   resources :user_values, only: [:create, :destroy]
